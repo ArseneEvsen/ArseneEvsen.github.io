@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Exemple de lecture de fichier Excel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <h1>Contenu du fichier Excel</h1>
+    <table id="excel-table"></table>
+    <script>
+      var req = new XMLHttpRequest();
+      req.open("GET", "Classeur.xlsx", true);
+      req.responseType = "arraybuffer";
+
+      req.onload = function() {
+        var data = new Uint8Array(req.response);
+        var workbook = XLSX.read(data, {type:"array"});
+        var sheetName = workbook.SheetNames[0];
+        var worksheet = workbook.Sheets[sheetName];
+        var htmlTable = XLSX.utils.sheet_to_html(worksheet);
+
+        document.getElementById("excel-table").innerHTML = htmlTable;
+      };
+
+      req.send();
+    </script>
+  </body>
+</html>
